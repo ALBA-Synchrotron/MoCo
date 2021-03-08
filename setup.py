@@ -23,7 +23,7 @@ def main():
    	# Define automatic scripts tht will be created during installation.
 	entry_points={
 	   'console_scripts': [
-	       'Moco = moco.tango.server.moco:main',
+	       'Moco = moco.tango.server.__main__:main',
 	   ],
 	}
 	)
