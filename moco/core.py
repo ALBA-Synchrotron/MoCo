@@ -64,51 +64,45 @@ class Moco:
     #                           Attributes
     # ------------------------------------------------------------------------
 
-    def in_beam_conf(self):
-        value = self.read_cmd('INBEAM')
-        return value
-
-    def in_beam_conf(self, conf):
+    def in_beam_conf(self, conf=None):
+        if conf is None:
+            value = self.read_cmd('INBEAM')
+            return value
         cmd = 'INBEAM {0}'.format(conf)
         self.write_cmd(cmd)
 
-    def out_beam_conf(self):
-        value = self.read_cmd('OUTBEAM')
-        return value
-
-    def out_beam_conf(self, conf):
+    def out_beam_conf(self, conf=None):
+        if conf is None:
+            value = self.read_cmd('OUTBEAM')
+            return value
         cmd = 'OUTBEAM {0}'.format(conf)
         self.write_cmd(cmd)
 
-    def set_point(self):
-        value = float(self.read_cmd('SETPOINT'))
-        return value
-
-    def set_point(self, value):
+    def set_point(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('SETPOINT'))
+            return value
         cmd = 'SETPOINT {}'.format(value)
         self.write_cmd(cmd)
 
-    def mode(self):
-        value = self.read_cmd('MODE')
-        return value
-
-    def mode(self, value):
+    def mode(self, value=None):
+        if value is None:
+            value = self.read_cmd('MODE')
+            return value
         cmd = 'MODE {}'.format(value)
         self.write_cmd(cmd)
 
-    def tau(self):
-        value = float(self.read_cmd('TAU'))
-        return value
-
-    def tau(self, value):
+    def tau(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('TAU'))
+            return value
         cmd = 'TAU {}'.format(value)
         self.write_cmd(cmd)
 
-    def soft_beam(self):
-        value = float(self.read_cmd('SOFTBEAM'))
-        return value
-
-    def soft_beam(self, value):
+    def soft_beam(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('SOFTBEAM'))
+            return value
         cmd = 'SOFTBEAM {0}'.format(float(value))
         self.write_cmd(cmd)
 
@@ -134,19 +128,17 @@ class Moco:
         value = self.read_cmd('STATE')
         return value
 
-    def piezo(self):
-        value = float(self.read_cmd('PIEZO'))
-        return value
-
-    def piezo(self, value):
+    def piezo(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('PIEZO'))
+            return value
         cmd = 'PIEZO {}'.format(value)
         self.write_cmd(cmd)
 
-    def scan_speed(self):
-        value = float(self.read_cmd('SPEED'))
-        return value
-
-    def scan_speed(self, value):
+    def scan_speed(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('SPEED'))
+            return value
         cmd = 'SPEED {}'.format(value)
         self.write_cmd(cmd)
 
@@ -156,35 +148,31 @@ class Moco:
         quad_signal = float(quad_signal)
         return main_signal, quad_signal
 
-    def phase(self):
-        value = float(self.read_cmd('PHASE'))
-        return value
-
-    def phase(self, value):
+    def phase(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('PHASE'))
+            return value
         cmd = 'PHASE {}'.format(value)
         self.write_cmd(cmd)
 
-    def amplitude(self):
-        value = float(self.read_cmd('AMPLITUDE'))
-        return value
-
-    def amplitude(self, value):
+    def amplitude(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('AMPLITUDE'))
+            return value
         cmd = 'AMPLITUDE {}'.format(value)
         self.write_cmd(cmd)
 
-    def frequency(self):
-        value = float(self.read_cmd('FREQUENCY'))
-        return value
-
-    def frequency(self, value):
+    def frequency(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('FREQUENCY'))
+            return value
         cmd = 'FREQUENCY {}'.format(value)
         self.write_cmd(cmd)
 
-    def slope(self):
-        value = float(self.read_cmd('SLOPE'))
-        return value
-
-    def slope(self, value):
+    def slope(self, value=None):
+        if value is None:
+            value = float(self.read_cmd('SLOPE'))
+            return value
         cmd = 'SLOPE {}'.format(value)
         self.write_cmd(cmd)
 
@@ -192,11 +180,10 @@ class Moco:
         value = self.read_cmd('SET').split()
         return value
 
-    def oscil(self):
-        value = self.read_cmd('OSCIL')
-        return value
-
-    def oscil(self, value):
+    def oscil(self, value=None):
+        if value is None:
+            value = self.read_cmd('OSCIL')
+            return value
         cmd = 'OSCIL {}'.format(value)
         self.write_cmd(cmd)
 
