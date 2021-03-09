@@ -34,7 +34,7 @@ class Moco:
 
     def write_cmd(self, cmd):
         data = '{}\r?ERR\r'.format(cmd)
-        ans = self._conn.write_readline(data.encode())
+        ans = self.conn.write_readline(data.encode())
         ans = ans.decode()
         ans = ans.strip('\r\n')
         if ans.lower() != 'ok':
