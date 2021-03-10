@@ -294,3 +294,9 @@ class Moco(Device):
     @Slope.write
     def Slope(self, value):
         self.moco.slope(value)
+
+    @attribute(dtype=str,
+               description='Query response function oscil (equivalent to '
+                           '?OSCIL)')
+    def Oscil(self):
+        return self.moco.oscil()
