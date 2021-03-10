@@ -13,6 +13,8 @@ class SyncConn:
     def __init__(self, url, timeout=1.5, **kwargs):
         self._conn = serial.serial_for_url(url, timeout=timeout, **kwargs)
 
+    def write_raw(self, data):
+        self._conn.write(data)
 
     def write_readline(self, data):
         self._conn.write(data)
