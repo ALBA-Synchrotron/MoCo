@@ -8,7 +8,7 @@
 
 
 from tango.server import Device, attribute, device_property, command
-from tango import AttributeProxy
+from tango import AttributeProxy, DevState
 import moco.core
 
 
@@ -23,7 +23,7 @@ class Moco(Device):
         self.in_beam_attr_proxy = None
         if self.softwareInBeamAtt is not None:
             self.in_beam_attr_proxy = AttributeProxy(self.softwareInBeamAtt)
-
+        self.set_state(DevState.ON)
     # ------------------------------------------------------------------
     # COMMANDS
     # ------------------------------------------------------------------
