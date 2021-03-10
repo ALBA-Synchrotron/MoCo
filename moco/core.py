@@ -7,22 +7,31 @@
 # See LICENSE for more info.
 
 import serial
+import logging
 
 
 class SyncConn:
     def __init__(self, url, timeout=1.5, **kwargs):
+        self.log = logging.getLogger('{}.SyncConn'.format(__name__))
         self._conn = serial.serial_for_url(url, timeout=timeout, **kwargs)
 
     def write_raw(self, data):
+        self.log.debug('write_raw -> %s', repr(data))
         self._conn.write(data)
 
     def write_readline(self, data):
+        self.log.debug('write_readline write -> %s', repr(data))
         self._conn.write(data)
-        return self._conn.readline()
+        ans = self._conn.readline()
+        self.log.debug('write_readline read -> %s', repr(ans))
+        return ans
 
     def write_readlines(self, data):
+        self.log.debug('write_readlines write -> %s', repr(data))
         self._conn.write(data)
-        return self._conn.readlines()
+        ans = self._conn.readlines()
+        self.log.debug('write_readlines read -> %s', repr(ans))
+        return ans
 
 
 class Moco:
