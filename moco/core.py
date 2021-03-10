@@ -139,12 +139,27 @@ class Moco:
         cmd = 'PIEZO {}'.format(value)
         self.write_cmd(cmd)
 
+    def speed(self, values=None):
+        if values is None:
+            scan_speed, move_speed = self.read_cmd('SPEED').split()
+            return float(scan_speed), float(move_speed)
+        str_values = ''
+        for value in values:
+            str_values += '{} '.format(str(value))
+        cmd = 'SPEED {}'.format(str_values)
+        self.write_cmd(cmd)
+
     def scan_speed(self, value=None):
         if value is None:
-            value = float(self.read_cmd('SPEED'))
-            return value
-        cmd = 'SPEED {}'.format(value)
-        self.write_cmd(cmd)
+            scan_speed, _ = self.speed()
+            return scan_speed
+        self.speed([value])
+
+    def move_speed(self, value=None):
+        scan_speed, move_speed = self.speed()
+        if value is None:
+            return move_speed
+        self.speed([scan_speed, value])
 
     def osc_beam_signals(self):
         main_signal, quad_signal = self.read_cmd('OSCBEAM').split()

@@ -213,6 +213,16 @@ class Moco(Device):
     def Piezo(self, value):
         self.moco.piezo(value)
 
+    @attribute(dtype=[float], max_dim_x=2,
+               description='Set/query scanning speed values (equivalent to '
+                           '?SPEED/SPEED)')
+    def Speed(self):
+        return self.moco.speed()
+
+    @Speed.write
+    def Speed(self, value):
+        self.moco.speed(value)
+
     @attribute(dtype=float,
                description='Set/query scanning speed values (equivalent to '
                            '?SPEED/SPEED)')
@@ -222,6 +232,16 @@ class Moco(Device):
     @ScanSpeed.write
     def ScanSpeed(self, value):
         self.moco.scan_speed(value)
+
+    @attribute(dtype=float,
+               description='Set/query scanning speed values (equivalent to '
+                           '?SPEED/SPEED)')
+    def MoveSpeed(self):
+        return self.moco.move_speed()
+
+    @MoveSpeed.write
+    def MoveSpeed(self, value):
+        self.moco.move_speed(value)
 
     @attribute(dtype=float,
                description='Query main signal amplitude (equivalent to '
