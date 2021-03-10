@@ -179,7 +179,7 @@ class Moco(Device):
         return beam_in
 
     @attribute(dtype=float)
-    def Beam_Out(self, the_att):
+    def Beam_Out(self):
         _, _, beam_out = self.moco.beam()
         return beam_out
 
@@ -194,7 +194,7 @@ class Moco(Device):
         return fbeam_in
 
     @attribute(dtype=float)
-    def FBeam_Out(self, the_att):
+    def FBeam_Out(self):
         _, _, fbeam_out = self.moco.fbeam()
         return fbeam_out
 
