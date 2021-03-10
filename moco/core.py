@@ -224,4 +224,5 @@ class Moco:
         return value
 
     def reset(self):
-        self.write_cmd('RESET')
+        # The reset command do not allow to check the error after
+        self.conn.write_raw(b'RESET\r')
