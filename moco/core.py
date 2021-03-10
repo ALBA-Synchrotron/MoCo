@@ -49,7 +49,8 @@ class Moco:
         if cmd in MULTILINE_CMDS:
             lines = self.conn.write_readlines(data.encode())
             ans = []
-            for line in lines:
+            # Remove $ character used on multilines commands
+            for line in lines[1:-1]:
                 line = line.decode()
                 ans.append(line.strip('\r\n'))
         else:
