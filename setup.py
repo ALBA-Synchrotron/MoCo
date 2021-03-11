@@ -24,7 +24,7 @@ requirements = [
 extra_requirements = {
     "tango": ["pytango"],
     "simulator": ["sinstruments>=1"],
-    "sardana": ["sardana>=3.0.3"]
+    "sardana": ["sardana>=3.0.3", 'click']
 }
 if extra_requirements:
     extra_requirements["all"] = list(set.union(*(set(i) for i in

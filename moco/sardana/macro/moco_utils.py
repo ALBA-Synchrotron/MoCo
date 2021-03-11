@@ -1,93 +1,148 @@
-from sardana.macroserver.macro import Type, Macro, UnknownEnv
+# -*- coding: utf-8 -*-
+#
+# This file is part of the MoCo project
+#
+# Copyright (c) 2020 ALBA controls team
+# Distributed under the GNU General Public License v3.
+# See LICENSE for more info.
+
+import functools
 import tango
+from contextlib import contextmanager
+from click import style
+
+from sardana.macroserver.macro import Type, macro, Optional
+
+TangoDevice = functools.lru_cache(maxsize=512)(tango.DeviceProxy)
 
 
-class Moco(object):
-    def __init__(self, macro_obj):
-        self.macro = macro_obj
+def get_device_names_by_class(class_name, server="*"):
+    """
+    Return list of device names for the given class name
+    The list can be filtered by server. By default the
+    search is performed on all servers.
+    """
+    db = tango.Database()
+    result = []
+    for server_name in db.get_server_list(server):
+        dev_class = db.get_device_class_list(server_name)
+        for dname, cname in zip(dev_class[::2], dev_class[1::2]):
+            if cname == class_name:
+                result.append(dname)
+    return result
+
+
+def get_device_name_by_class(class_name, server="*"):
+    """
+    Return device name for the given class name.
+    The list can be filtered by server. By default the
+    search is performed on all servers.
+    """
+    devices = get_device_names_by_class(class_name, server)
+    if devices:
+        if len(devices) == 1:
+            return devices[0]
+        else:
+            raise ValueError(
+                "More than one device of type {!} found".format(class_name)
+            )
+    else:
+        raise ValueError("No device of type {!r} found".format(class_name))
+
+
+
+@contextmanager
+def output_context(macro, message):
+    """
+    Print "message" when entering context and " [DONE]/[ERROR]" in the same line
+    when exiting context.
+
+    """
+    macro.outputBlock(message)
+    try:
+        yield
+    except Exception as error:
+        msg = "{} [{}]".format(message, style("ERROR. Check if it is ON",
+                                              fg="red"))
+        macro.outputBlock(msg)
+        raise
+    else:
+        msg = "{} [{}]".format(message, style("DONE", fg="green"))
+        macro.outputBlock(msg)
+
+
+class Moco:
+
+    def __init__(self, name=None):
+        if name is None:
+            name = get_device_name_by_class("Moco", "Moco/*")
+        self.name = name
+
+    @property
+    def device(self):
+        return TangoDevice(self.name)
+
+    # By default, delegate methods and properties to tango directly
+    def __getattr__(self, name):
+        return getattr(self.device, name)
+
+    def __repr__(self):
         try:
-            moco_device_name = self.macro.getEnv('MocoDeviceName')
-        except UnknownEnv:
-            msg = 'The macro uses the environment variable MocoDeviceName ' \
-                  'which has the instance name for the Moco Tango Device ' \
-                  'Server.'
-            raise RuntimeError(msg)
-        self.dev = tango.DeviceProxy(moco_device_name)
-
-    def cmd(self, cmd):
-        try:
-            ans = self.dev.OnlineCmd(cmd)
-            return ans
-        except Exception as e:
-            self.macro.debug('Error %s', str(e))
-            self.macro.error('Can not send the command %s. Check if it is on',
-                             cmd)
-
-    def set_piezo(self, pos):
-        try:
-            self.dev.write_attribute('piezo', pos)
-        except Exception as e:
-            self.macro.debug('Error %s', str(e))
-            self.macro.error('Can not set the piezo pos to %f. '
-                           'Check if it is on', pos)
-
-    def go(self):
-        try:
-            self.dev.go()
-        except Exception as e:
-            self.macro.debug('Error %s', str(e))
-            self.macro.error('Can not start moco. Check if it is on')
-
-    def stop(self):
-        try:
-            self.dev.stop()
-        except Exception as e:
-            self.macro.debug('Error %s', str(e))
-            self.macro.error('Can not stop moco. Check if it is on')
-
-    def status(self):
-        try:
-            return self.dev.read_attribute('MocoState').value
-        except Exception as e:
-            self.macro.debug('Error %s', str(e))
-            self.macro.error('Can not read status. Check if it is on')
-            return 'FAULT'
+           return self.device.info()
+        except Exception as error:
+            return "Moco: {!r}".format(error)
 
 
-class moco_cmd(Macro):
-    param_def = [['cmd', Type.String, None, 'Command to send']]
-
-    def run(self, cmd):
-        moco = Moco(self)
-        ans = moco.cmd(cmd)
-        self.output(ans)
+moco = Moco()
 
 
-class set_moco_piezo(Macro):
-    param_def = [['pos', Type.Float, None, 'position']]
+@macro()
+def moco_info(self):
+    with output_context(self, 'Moco reading status info...'):
+        info = '\n'.join(moco.getinfo())
+        self.output(info)
 
-    def run(self, pos):
-        moco = Moco(self)
-        moco.set_piezo(pos)
+
+@macro(result_def=[['status', Type.String, None, 'Moco state']])
+def moco_status(self):
+    with output_context(self, 'Moco reading state...'):
+        return moco.MocoState
 
 
-class moco_go(Macro):
-
-    def run(self):
-        moco = Moco(self)
+@macro()
+def moco_go(self):
+    with output_context(self, "Moco sending Go..."):
         moco.go()
 
 
-class moco_stop(Macro):
-
-    def run(self):
-        moco = Moco(self)
+@macro()
+def moco_stop(self):
+    with output_context(self, "Moco stopping..."):
         moco.stop()
 
 
-class moco_status(Macro):
-    result_def = [['status', Type.String, None, 'Moco state']]
+@macro(param_def=[['config', Type.String, Optional,
+                  'Configuration parameter see INBEAM/?INBEAM command']],
+       result_def=[['config', Type.String, None, 'Current configuration']])
+def moco_inbeam_conf(self, config):
+    if config is not None:
+        with output_context(self, 'Moco setting InBeamConfig "{}"...'.format(
+                config)):
+            moco.write_attribute('InBeamConf', config)
+    else:
+        with output_context(self, 'Moco reading InBeamConfig...'):
+            return moco.InBeamConf
 
-    def run(self):
-        moco = Moco(self)
-        return moco.status()
+
+@macro(param_def=[['cmd', Type.String, None, 'Command to send']])
+def moco_cmd(self, cmd):
+    with output_context(self, 'Moco running OnlineCommand "{}"'.format(
+            cmd)):
+        ans = moco.OnlineCmd(cmd)
+        self.output(ans)
+        # TODO investigate how to return a list
+        return moco.OnlineCmd(cmd)
+
+
+
+
