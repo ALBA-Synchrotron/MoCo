@@ -14,9 +14,6 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.md') as history_file:
-    history = history_file.read()
-
 requirements = [
     "pyserial>=3.5",
 ]
@@ -54,13 +51,13 @@ setup(
                 "Monochromator Controller MoCo",
     entry_points={
         'console_scripts': [
-            'Moco=moco.tango.server:main [tango]',
+            'Moco=moco.tango.server.__main__:main [tango]',
         ],
     },
     extras_require=extra_requirements,
     install_requires=requirements,
     license="GNU General Public License v3",
-    long_description=readme + '\n\n' + history,
+    long_description=readme + '\n\n',
     long_description_content_type="text/markdown",
     include_package_data=True,
     keywords='moco',
