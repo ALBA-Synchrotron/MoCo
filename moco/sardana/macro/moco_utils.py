@@ -139,7 +139,7 @@ def moco_cmd(self, cmd):
     with output_context(self, 'Moco running OnlineCommand "{}"'.format(
             cmd)):
         ans = moco.OnlineCmd(cmd)
-        self.output(ans)
+        self.debug(ans)
         # TODO investigate how to return a list
         return moco.OnlineCmd(cmd)
 
