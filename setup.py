@@ -36,7 +36,7 @@ setup(
     author_email='controls@cells.es',
     python_requires='>=3.5',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
@@ -47,7 +47,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    description="Library, simulator, tango server and sardana plugins for "
+    description="Library, simulator, Tango server and Sardana plugins for "
                 "Monochromator Controller MoCo",
     entry_points={
         'console_scripts': [
@@ -66,7 +66,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/ALBA-Synchrotron/MocoDS',
+    url='https://github.com/ALBA-Synchrotron/MoCo',
     version='1.2.1',
     zip_safe=False,
 )
