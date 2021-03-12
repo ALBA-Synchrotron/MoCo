@@ -9,3 +9,4 @@ or mechanical instability. [Manual](doc/moco.pdf)
 
 The library exports a Tango Device Server and general plugins for Sardana.
 
+
