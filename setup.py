@@ -23,11 +23,10 @@ extra_requirements = {
     "simulator": ["sinstruments>=1"],
     "sardana": ["sardana>=3.0.3", 'click']
 }
+
 if extra_requirements:
     extra_requirements["all"] = list(set.union(*(set(i) for i in
                                                  extra_requirements.values())))
-
-setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest>=3', ]
 
@@ -63,7 +62,6 @@ setup(
     keywords='moco',
     name='moco',
     packages=find_packages(),
-    setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ALBA-Synchrotron/MoCo',
