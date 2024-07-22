@@ -15,11 +15,12 @@ import moco.core
 class Moco(Device):
 
     url = device_property(dtype=str)
+    concurrency = device_property(dtype=str, default_value="sync")
     softwareInBeamAtt = device_property(dtype=str, default_value=None)
 
     def init_device(self):
         super().init_device()
-        self.moco = moco.core.Moco.for_url(self.url)
+        self.moco = moco.core.Moco.for_url(self.url, self.concurrency)
         self.in_beam_attr_proxy = None
         if self.softwareInBeamAtt is not None:
             self.in_beam_attr_proxy = AttributeProxy(self.softwareInBeamAtt)

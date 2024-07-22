@@ -6,14 +6,14 @@
 # Distributed under the GNU General Public License v3.
 # See LICENSE for more info.
 
-import serial
+import serialio
 import logging
 
 
 class SyncConn:
-    def __init__(self, url, timeout=1.5, **kwargs):
+    def __init__(self, url, concurrency="synch", timeout=1.5, **kwargs):
         self.log = logging.getLogger('{}.SyncConn'.format(__name__))
-        self._conn = serial.serial_for_url(url, timeout=timeout, **kwargs)
+        self._conn = serialio.serial_for_url(url, timeout=timeout, concurrency=concurrency, **kwargs)
 
     def write_raw(self, data):
         self.log.debug('write_raw -> %s', repr(data))
@@ -40,8 +40,8 @@ class Moco:
         self.conn = conn
 
     @classmethod
-    def for_url(cls, url, **kwargs):
-        conn = SyncConn(url, **kwargs)
+    def for_url(cls, url, concurrency, **kwargs):
+        conn = SyncConn(url, concurrency=concurrency, **kwargs)
         return cls(conn)
 
     def write_cmd(self, cmd):
