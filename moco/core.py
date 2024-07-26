@@ -11,7 +11,7 @@ import logging
 
 
 class SyncConn:
-    def __init__(self, url, concurrency="synch", timeout=1.5, **kwargs):
+    def __init__(self, url, concurrency="sync", timeout=1.5, **kwargs):
         self.log = logging.getLogger('{}.SyncConn'.format(__name__))
         self._conn = serialio.serial_for_url(url, timeout=timeout, concurrency=concurrency, **kwargs)
 
@@ -40,8 +40,8 @@ class Moco:
         self.conn = conn
 
     @classmethod
-    def for_url(cls, url, concurrency, **kwargs):
-        conn = SyncConn(url, concurrency=concurrency, **kwargs)
+    def for_url(cls, url, **kwargs):
+        conn = SyncConn(url, **kwargs)
         return cls(conn)
 
     def write_cmd(self, cmd):
