@@ -29,7 +29,13 @@ class SyncConn:
     def write_readlines(self, data):
         self.log.debug('write_readlines write -> %s', repr(data))
         self._conn.write(data)
-        ans = self._conn.readlines()
+        ans = []
+        ans.append(self._conn.readline())
+        while True:
+            line = self._conn.readline()
+            ans.append(line)
+            if b'$' in line:
+                break
         self.log.debug('write_readlines read -> %s', repr(ans))
         return ans
 
