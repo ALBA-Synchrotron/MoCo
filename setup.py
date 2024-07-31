@@ -15,12 +15,11 @@ with open('README.md') as readme_file:
     readme = readme_file.read()
 
 requirements = [
-    "pyserial>=3.5",
+    "serialio>=2.4.1",
 ]
 
 extra_requirements = {
     "tango": ["pytango"],
-    "simulator": ["sinstruments>=1"],
     "sardana": ["sardana>=3.0.3", 'click']
 }
 
