@@ -162,7 +162,7 @@ class Moco(Device):
     def SoftBeam(self, value):
         self.moco.soft_beam(value)
 
-    @attribute(dtype=[str],
+    @attribute(dtype=[str], max_dim_x=8,
                description='Set/query operation flags  equivalent to '
                            '?SET/SET)')
     def OperationFlags(self):

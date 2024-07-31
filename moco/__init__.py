@@ -6,4 +6,4 @@
 # Distributed under the GNU General Public License v3.
 # See LICENSE for more info.
 
-__version__ = '2.0.2'
+__version__ = '2.1.0'
