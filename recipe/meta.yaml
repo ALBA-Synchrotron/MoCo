@@ -1,0 +1,51 @@
+{% set data = load_setup_py_data(setup_file="../setup.py",
+  from_recipe_dir=True) %}
+
+package:
+  name: {{data.get('name').lower().replace(' ', '_')}}
+  version: {{ data.get('version') }}
+
+source:
+  # Relative path to the parent directory of the recipe.
+  path: ..
+
+build:
+  noarch: python
+  entry_points:  {{data.get('entry_points', {}).get('console_scripts', [])}}
+  script: "{{ PYTHON }} -m pip install . -vv"
+
+requirements:
+  host:
+    - python {{ data['python_requires'] }}
+    - pip
+    - setuptools
+  run:
+    - python {{ data['python_requires'] }}
+    {% for dep in data['install_requires'] %}
+    - {{ dep.lower()}}
+    {% endfor %}
+    - pytango
+    - sardana
+    - click
+
+
+test:
+  imports:
+    - moco
+  commands:
+    - pip check
+    - Moco --help
+  requires:
+    - pip
+
+
+about:
+  home: https://github.com/ALBA-Synchrotron/MoCo
+  license: {{ data.get('license')}}
+  summary: {{ data.get('description')}}
+  author: {{ data.get('author')}}
+
+extra:
+  recipe-maintainers:
+    - ovallcorba
+    - rhoms
