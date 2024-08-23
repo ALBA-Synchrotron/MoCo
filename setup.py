@@ -49,7 +49,7 @@ setup(
                 "Monochromator Controller MoCo",
     entry_points={
         'console_scripts': [
-            'Moco=moco.tango.server.__main__:main [tango]',
+            'Moco=moco.tango.server.__main__:main',
         ],
     },
     extras_require=extra_requirements,
